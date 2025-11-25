@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalSetelahDiskon = totalHarga;
 
     if (jenisCustomer === "perorangan" && totalItem >= 100) {
-        diskon = Math.round(totalHarga * 0.08); // 8% diskon
+        diskon = Math.round(totalHarga * 0.05); // 5% diskon
         totalSetelahDiskon = totalHarga - diskon;
 
         diskonEl.style.display = "block";
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
       cards.forEach(card => {
         const hargaAsli = parseInt(card.dataset.price);
         const hargaBaru = jenisCustomer === "mitra"
-          ? Math.round(hargaAsli * 0.8)
+          ? Math.round(hargaAsli * 0.95)
           : hargaAsli;
 
         const hargaElem = card.querySelector(".harga");
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
       keranjang.forEach(item => {
         item.harga_asli = parseInt(item.harga_asli);
         item.harga = jenisCustomer === "mitra"
-          ? Math.round(item.harga_asli * 0.8)
+          ? Math.round(item.harga_asli * 0.95)
           : item.harga_asli;
       });
 
@@ -225,9 +225,9 @@ document.addEventListener("DOMContentLoaded", () => {
 const totalItem = keranjang.reduce((sum, item) => sum + item.qty, 0);
 if (jenisCustomer === "mitra" && totalItem < 100) {
     alert("Minimal pemesanan untuk Mitra adalah 100 pcs!");
-    return; // Stop jika belum mencapai minimal
+     modal.style.display = "none";
+    return false; // Stop jika belum mencapai minimal
 }
-
     document.getElementById("jenis_customer").value = jenisCustomer;
     modal.style.display = "block";
   });

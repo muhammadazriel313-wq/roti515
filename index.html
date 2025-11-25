@@ -6,6 +6,161 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <title>Roti 515</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ===== Tambahkan CSS ini untuk memperbaiki Navigasi ===== */
+    /* Pastikan navbar selalu di paling atas */
+    .navbar {
+      position: fixed; /* Pastikan navbar menempel di atas saat scroll */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2000; /* Nilai tinggi agar berada di atas video slider */
+      background-color: rgba(0, 0, 0, 0.7); /* Opsional: tambah background agar teks terlihat jelas di atas video */
+      backdrop-filter: blur(5px); /* Efek kaca buram yang modern */
+    }
+
+    /* Tambahkan padding pada body agar konten tidak tertutup navbar */
+    body {
+      padding-top: 100px; /* Sesuaikan dengan tinggi navbar Anda */
+    }
+    
+    /* ===================================================== */
+
+    /* Tambahan CSS untuk video slider */
+    .video-slider {
+      position: relative;
+      width: 100%;
+      height: 100vh; /* Full viewport height */
+      overflow: hidden;
+      /* Menurunkan posisi slider agar tidak menutupi navbar */
+      top: 0; /* Karena body sudah ada padding, slider bisa mulai dari atas */
+    }
+    
+    .video-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    
+    .video-slide.active {
+      opacity: 1;
+    }
+    
+    .video-slide video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Memastikan video memenuhi area tanpa distorsi */
+    }
+    
+    .slider-controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      z-index: 10; /* Z-index lebih rendah dari navbar */
+    }
+    
+    .slider-btn {
+      background-color: rgba(255, 255, 255, 0.3);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      margin: 0 20px;
+      transition: background-color 0.3s;
+    }
+    
+    .slider-btn:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .slider-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 5; /* Z-index lebih rendah dari navbar */
+    }
+    
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .dot.active {
+      background-color: white;
+    }
+    
+    .hero-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      z-index: 5; /* Z-index lebih rendah dari navbar */
+      width: 80%;
+      max-width: 800px;
+    }
+    
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Bayangan lebih tebal untuk keterbacaan */
+    }
+    
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Bayangan lebih tebal untuk keterbacaan */
+    }
+    
+    .hero-content .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #f1ad38;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    .hero-content .btn:hover {
+      background-color: #d18f2c;
+    }
+
+    /* Responsif untuk layar lebih kecil */
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      .hero-content p {
+        font-size: 1rem;
+      }
+      .slider-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        margin: 0 10px;
+      }
+    }
+  </style>
   <script defer src="script.js"></script>
 </head>
 <body>
@@ -27,34 +182,80 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Hero Section dengan Video Slider -->
   <section id="home" class="hero">
-    <div class="hero-text" data-aos="fade-up">
-      <h1>Roti Tradisional Kualitas Premium</h1>
-      <p>Hangat dari oven setiap pagi, Menghadirkan rasa rumahan yang menyulap setiap gigitan jadi momen bahagia.
-        Temukan berbagai makanan ringan kekinian yang bikin harimu makin seru.</p>
-      <a href="#produk" class="btn">Lihat Produk</a>
+    <div class="video-slider">
+      <!-- Video 1 -->
+      <div class="video-slide active">
+        <video autoplay muted loop>
+          <source src="Produk umkm video3.mp4" type="video/mp4">
+        </video>
+      </div>
+      
+      <!-- Video 2 -->
+      <div class="video-slide">
+        <video autoplay muted loop>
+          <source src="Produk umkm video1.mp4" type="video/mp4">
+        </video>
+      </div>
+      
+      <!-- Video 3 -->
+      <div class="video-slide">
+        <video autoplay muted loop>
+          <source src="Produk umkm video2.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Video 4 -->
+    <div class="video-slide">
+      <video autoplay loop>
+        <source src="sezz1234.mp4" type="video/mp4">
+      </video>
+      <span class="video-duration"></span>
     </div>
+      
+      <!-- Tombol Navigasi -->
+      <div class="slider-controls">
+        <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+        <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      
+      <!-- Indikator Dot -->
+      <div class="slider-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
   </section>
 
   <!-- About Section -->
 <section id="about" class="about section">
   <div class="about-container">
-    <div class="about-image">
-      <img id="aboutImage" src="12.jpg" alt="Tentang Kami">
+    
+    <!-- KIRI: Kartu Rekomendasi Owner -->
+    <div class="owner-card">
+      <img src="owner%20515.jpg" alt="Owner Roti 515" class="owner-photo">
+      <h3>Siswanto</h3>
+      <p class="owner-title">Pemilik Roti 515</p>
+      <blockquote class="recommendation">
+        "Komitmen kami adalah menghadirkan roti kering dengan resep tradisional dan bahan pilihan. Setiap gigitan adalah cerminan dedikasi kami untuk memberikan yang terbaik bagi keluarga Indonesia."
+      </blockquote>
     </div>
+
+    <!-- KANAN: Teks Tentang Kami -->
     <div class="about-text">
       <h2>Tentang Kami</h2>
       <h1>ROTI 515</h1>
       <p>Usaha roti kering yang dikelola oleh narasumber diberi nama 515, penamaan ini diambil dari nama pemilik yaitu Siswanto (SIS) sebagai identitas unik (515). UMKM ini memproduksi berbagai produk roti kering, antara lain Roti Susu, Pia Kacang, Bolu Plemben, Onde-Onde Ketawa, Roti Marie Kelapa, Roti Wijen.</p>
       <p>Pemilik menyampaikan bahwa motivasi utama memulai usaha adalah untuk menciptakan lapangan kerja serta tetap dekat dengan keluarga tanpa harus bekerja jauh dari kampung halaman.</p>
     </div>
+
   </div>
 </section>
 
   <!-- Produk Section -->
   <section id="produk" class="produk section">
-    <h2>Produk Unggulan</h2>
+    <h2>Produk Roti 515</h2>
     <div class="produk-container">
       <div class="card">
         <img src="pk.jpg" alt="Pia Kacang">
@@ -169,6 +370,112 @@ window.open(url, "_blank");
     document.getElementById("nama").value = "";
     document.getElementById("pesan").value = "";
 });
+
+// Video Slider Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.video-slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    let currentSlide = 0;
+    let slideTimer; // Variabel untuk menampung timer
+
+    // Pilih video keempat dan elemen durasinya
+    const video4 = document.querySelectorAll('.video-slide')[3].querySelector('video');
+    const durationDisplay = document.querySelector('.video-duration');
+
+    // Fungsi helper untuk memformat detik menjadi format MM:SS
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    // Tampilkan durasi video 4 setelah metadata termuat
+    if (video4 && durationDisplay) {
+        video4.addEventListener('loadedmetadata', function() {
+            const duration = video4.duration;
+            durationDisplay.textContent = formatTime(duration);
+        });
+    }
+    
+    // Fungsi untuk menampilkan slide tertentu
+    function showSlide(n) {
+        // Hapus timer sebelumnya agar tidak menumpuk
+        clearTimeout(slideTimer);
+
+        // Sembunyikan semua slide
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Tampilkan slide yang dipilih
+        currentSlide = (n + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+
+        updateVideoSound();
+
+        // Jalankan timer untuk slide berikutnya
+        startSlideTimer();
+    }
+    
+    // Fungsi untuk menjalankan timer auto-slide
+    function startSlideTimer() {
+        const defaultDuration = 5000; // 5 detik untuk slide 1, 2, 3
+
+        // Periksa apakah slide saat ini adalah slide ke-4 (indeks 3)
+        if (currentSlide === 3 && video4) {
+            // Jika video 4 ada, gunakan durasinya sebagai timer
+            // Fallback ke default jika durasi video tidak tersedia
+            const videoDuration = (video4.duration && !isNaN(video4.duration)) ? video4.duration * 1000 : defaultDuration;
+            slideTimer = setTimeout(() => {
+                showSlide(currentSlide + 1);
+            }, videoDuration);
+        } else {
+            // Untuk slide lainnya, gunakan durasi default
+            slideTimer = setTimeout(() => {
+                showSlide(currentSlide + 1);
+            }, defaultDuration);
+        }
+    }
+    
+    // Event listener untuk tombol prev
+    prevBtn.addEventListener('click', () => {
+        showSlide(currentSlide - 1);
+    });
+    
+    // Event listener untuk tombol next
+    nextBtn.addEventListener('click', () => {
+        showSlide(currentSlide + 1);
+    });
+    
+    // Event listener untuk dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+        });
+    });
+    
+    // Atur suara video
+function updateVideoSound() {
+    slides.forEach((slide, index) => {
+        const vid = slide.querySelector("video");
+        if (!vid) return;
+
+        if (index === 3) {
+            vid.muted = false;
+            vid.currentTime = 0;
+            vid.play();
+        } else {
+            vid.muted = true;
+            vid.play();
+        }
+    });
+}
+
+    // Mulai timer untuk slide pertama kali
+    startSlideTimer();
+});
 </script>
 
   <footer>
@@ -181,6 +488,6 @@ window.open(url, "_blank");
   <div class="float-social">
   <a href="https://wa.me/6285940947728" class="fs-btn">
       <img src="wa.logo.png" alt="WA">
-  </a></div>
+  </a></div>
 </body>
 </html>

@@ -395,7 +395,7 @@ body {
 
 .about-text h1 {
   font-size: 2em;
-  color: #000;
+  color: #eee4e4;
   margin-bottom: 15px;
 }
 
@@ -467,7 +467,7 @@ body {
   margin-top: 35px;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
-  color: red;
+  color: rgb(237, 232, 232);
 }
 .about-text p {
   margin-top: -10px;
@@ -886,3 +886,114 @@ footer {
     width: 110px !important;   /* ukuran logo WA */
     height: 80px !important;
 }
+
+/* ================= TAMBAHKAN CSS INI UNTUK OWNER CARD ================= */
+.owner-card {
+  text-align: center;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 400px;
+}
+
+.owner-photo {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%; /* INI YANG MEMBUAT FOTO BULAT */
+  object-fit: cover; /* Memastikan foto tidak terdistorsi */
+  border: 5px solid #f1ad38;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.owner-photo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.owner-card h3 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #333;
+}
+
+.owner-title {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 25px;
+  font-weight: normal;
+}
+
+.recommendation {
+  font-style: italic;
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 15px 0;
+  position: relative;
+  padding: 0 20px;
+}
+
+/* Tambahkan tanda kutip di awal dan akhir */
+.recommendation::before,
+.recommendation::after {
+  content: '"';
+  font-size: 2.5rem;
+  color: #f1ad38;
+  font-family: Georgia, serif;
+  position: absolute;
+  opacity: 0.5;
+}
+
+.recommendation::before {
+  top: -15px;
+  left: -10px;
+}
+
+.recommendation::after {
+  bottom: -30px;
+  right: -10px;
+}
+
+.recommendation-label {
+  font-size: 0.9rem;
+  color: #f1ad38;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Pastikan container 'about' tetap rapi */
+.about-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap; /* Agak responsif */
+}
+
+.about-text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.owner-card {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+  .about-container {
+    flex-direction: column;
+  }
+  .owner-photo {
+    width: 150px;
+    height: 150px;
+  }
+}
+/* =================================================================== */

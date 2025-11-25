@@ -58,8 +58,8 @@ include('../database/koneksi.php');
             <th>Metode</th>
             <th>Status</th>
             <th>Tanggal</th>
-            <th>✔</th>
-            <th>🗑</th>
+            <th>Keterangan</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -75,15 +75,16 @@ include('../database/koneksi.php');
             echo "<td>".$laporan['metode_pembayaran']."</td>";
             echo "<td class='status Selesai'>".$laporan['status']."</td>";
             echo "<td>".$laporan['tanggal']."</td>";
-            echo "<td style='color:#00ff88;font-size:22px;'>✔</td>";
-
-            // ========= TOMBOL HAPUS =========
-            echo "<td>
-                    <a class='btn-hapus' 
+            echo "<td style='color:#00ff88;font-size:22px;'>
+             <a class='btn-hapus' 
                        href='hapus_laporan.php?id=".$laporan['id']."' 
                        onclick='return confirm(\"Yakin ingin menghapus laporan ini?\")'>
                        🗑
                     </a>
+                    </td>";
+            // ========= TOMBOL HAPUS =========
+            echo "<td>
+                   
                   </td>";
 
             echo "</tr>";

@@ -115,7 +115,10 @@ switch ($p['nama_produk']) {
 }
 
         echo '
-        <div class="card" data-price="'.$harga.'" data-name="'.htmlspecialchars($p['nama_produk']).'">
+        <div class="card" 
+        data-price="'.$harga.'" 
+        data-name="'.htmlspecialchars($p['nama_produk']).'" 
+        data-stok="'.$p['stok'].'">
           <img src="uploads/'.htmlspecialchars($p['gambar']).'" alt="'.htmlspecialchars($p['nama_produk']).'">
           <h3>'.htmlspecialchars($p['nama_produk']).'</h3>
           <p>'.htmlspecialchars($p['deskripsi']).'</p>
@@ -208,7 +211,7 @@ switch ($p['nama_produk']) {
 
   <div id="transferArea" style="display:none; margin-top:10px;">
     <p><strong>Transfer ke rekening:</strong></p>
-    <p id="noRek">BCA 123-456-789 a.n. Roti 515</p>
+    <p id="noRek">BRI  a.n. Roti 515</p>
       <p>(Silahkan Upload Bukti Pembayaran di WA Kami)</p>
   </div>
 
@@ -222,13 +225,56 @@ switch ($p['nama_produk']) {
 
 </form>
 
-<div id="successMsg" style="display:none;text-align:center;color:#2e7d32;font-weight:bold;margin-top:10px;">
-  ✅ Pesanan kamu berhasil dikirim ke admin! Mengarahkan ke beranda...
-</div>
-
   </div>
 </div>
 
+<!-- POPUP PERINGATAN STOK -->
+<div id="popupStok" class="modal">
+  <div class="modal-content" style="background:#ff0000;">
+    <span class="closeStok" style="float:right;cursor:pointer;font-size:22px;">&times;</span>
+    <h3 style="color:white;">Peringatan!</h3>
+    <p id="pesanStok" style="color:white;font-size:18px;font-weight:bold;"></p>
+  </div>
+</div>
+
+<script>
+// Ambil elemen popup
+const popupStok = document.getElementById("popupStok");
+const pesanStok = document.getElementById("pesanStok");
+document.querySelector(".closeStok").onclick = () => {
+  popupStok.style.display = "none";  
+  // Pastikan modal checkout tetap tertutup
+  document.getElementById("checkoutModal").style.display = "none";
+};
+
+// CEK STOK SAAT CHECKOUT
+document.getElementById("checkout").addEventListener("click", function(e) {
+
+  let cards = document.querySelectorAll(".card");
+  let adaError = false;
+  let pesan = "";
+
+ cards.forEach(card => {
+  let stok = parseInt(card.getAttribute("data-stok"));
+  let qty = parseInt(card.querySelector(".jumlah").value);
+
+  if (qty > stok) {
+    adaError = true;
+    pesan += `Pembelian ${card.getAttribute("data-name")} melebihi stok tersedia<br>`;
+  }
+});
+
+  if (adaError) {
+    e.preventDefault();
+    pesanStok.innerHTML = pesan;
+    popupStok.style.display = "block";
+    return; // stop checkout
+  }
+
+  // Jika tidak ada error → buka modal checkout normal
+  document.getElementById("checkoutModal").style.display = "block";
+});
+</script>
 
 <script src="keranjang.js"></script>
 
