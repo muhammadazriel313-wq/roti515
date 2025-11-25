@@ -14,8 +14,8 @@
       top: 0;
       left: 0;
       width: 100%;
-      z-index: 2000; /* Nilai tinggi agar berada di atas video slider */
-      background-color: rgba(0, 0, 0, 0.7); /* Opsional: tambah background agar teks terlihat jelas di atas video */
+      z-index: 2000; /* Nilai tinggi agar berada di atas slider */
+      background-color: rgba(0, 0, 0, 0.7); /* Opsional: tambah background agar teks terlihat jelas di atas gambar */
       backdrop-filter: blur(5px); /* Efek kaca buram yang modern */
     }
 
@@ -26,8 +26,8 @@
     
     /* ===================================================== */
 
-    /* Tambahan CSS untuk video slider */
-    .video-slider {
+    /* Tambahan CSS untuk image slider */
+    .image-slider {
       position: relative;
       width: 100%;
       height: 100vh; /* Full viewport height */
@@ -36,7 +36,7 @@
       top: 0; /* Karena body sudah ada padding, slider bisa mulai dari atas */
     }
     
-    .video-slide {
+    .image-slide {
       position: absolute;
       top: 0;
       left: 0;
@@ -46,14 +46,14 @@
       transition: opacity 1s ease-in-out;
     }
     
-    .video-slide.active {
+    .image-slide.active {
       opacity: 1;
     }
     
-    .video-slide video {
+    .image-slide img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Memastikan video memenuhi area tanpa distorsi */
+      object-fit: cover; /* Memastikan gambar memenuhi area tanpa distorsi */
     }
     
     .slider-controls {
@@ -182,37 +182,23 @@
     </nav>
   </header>
 
-  <!-- Hero Section dengan Video Slider -->
+  <!-- Hero Section dengan Image Slider -->
   <section id="home" class="hero">
-    <div class="video-slider">
-      <!-- Video 1 -->
-      <div class="video-slide active">
-        <video autoplay muted loop>
-          <source src="Produk umkm video3.mp4" type="foto produk 515">
-        </video>
+    <div class="image-slider">
+      <!-- Gambar 1 -->
+      <div class="image-slide active">
+        <img src="owner%20515.jpg" alt="Foto Produk 515">
       </div>
       
-      <!-- Video 2 -->
-      <div class="video-slide">
-        <video autoplay muted loop>
-          <source src="Produk umkm video1.mp4" type="video/mp4">
-        </video>
+      <!-- Gambar 2 -->
+      <div class="image-slide">
+        <img src="owner%20515.jpg" alt="Foto Produk 515">
       </div>
       
-      <!-- Video 3 -->
-      <div class="video-slide">
-        <video autoplay muted loop>
-          <source src="Produk umkm video2.mp4" type="video/mp4">
-        </video>
+      <!-- Gambar 3 -->
+      <div class="image-slide">
+        <img src="owner%20515.jpg" alt="Foto Produk 515">
       </div>
-
-      <!-- Video 4 -->
-    <div class="video-slide">
-      <video autoplay loop>
-        <source src="sezz1234.mp4" type="video/mp4">
-      </video>
-      <span class="video-duration"></span>
-    </div>
       
       <!-- Tombol Navigasi -->
       <div class="slider-controls">
@@ -371,33 +357,14 @@ window.open(url, "_blank");
     document.getElementById("pesan").value = "";
 });
 
-// Video Slider Functionality
+// Image Slider Functionality
 document.addEventListener('DOMContentLoaded', function() {
-    const slides = document.querySelectorAll('.video-slide');
+    const slides = document.querySelectorAll('.image-slide'); // Diubah dari .video-slide
     const dots = document.querySelectorAll('.dot');
     const prevBtn = document.querySelector('.prev-btn');
     const nextBtn = document.querySelector('.next-btn');
     let currentSlide = 0;
     let slideTimer; // Variabel untuk menampung timer
-
-    // Pilih video keempat dan elemen durasinya
-    const video4 = document.querySelectorAll('.video-slide')[3].querySelector('video');
-    const durationDisplay = document.querySelector('.video-duration');
-
-    // Fungsi helper untuk memformat detik menjadi format MM:SS
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-
-    // Tampilkan durasi video 4 setelah metadata termuat
-    if (video4 && durationDisplay) {
-        video4.addEventListener('loadedmetadata', function() {
-            const duration = video4.duration;
-            durationDisplay.textContent = formatTime(duration);
-        });
-    }
     
     // Fungsi untuk menampilkan slide tertentu
     function showSlide(n) {
@@ -413,30 +380,18 @@ document.addEventListener('DOMContentLoaded', function() {
         slides[currentSlide].classList.add('active');
         dots[currentSlide].classList.add('active');
 
-        updateVideoSound();
-
         // Jalankan timer untuk slide berikutnya
         startSlideTimer();
     }
     
     // Fungsi untuk menjalankan timer auto-slide
     function startSlideTimer() {
-        const defaultDuration = 5000; // 5 detik untuk slide 1, 2, 3
+        const defaultDuration = 5000; // 5 detik untuk semua slide
 
-        // Periksa apakah slide saat ini adalah slide ke-4 (indeks 3)
-        if (currentSlide === 3 && video4) {
-            // Jika video 4 ada, gunakan durasinya sebagai timer
-            // Fallback ke default jika durasi video tidak tersedia
-            const videoDuration = (video4.duration && !isNaN(video4.duration)) ? video4.duration * 1000 : defaultDuration;
-            slideTimer = setTimeout(() => {
-                showSlide(currentSlide + 1);
-            }, videoDuration);
-        } else {
-            // Untuk slide lainnya, gunakan durasi default
-            slideTimer = setTimeout(() => {
-                showSlide(currentSlide + 1);
-            }, defaultDuration);
-        }
+        // Gunakan durasi default untuk semua slide
+        slideTimer = setTimeout(() => {
+            showSlide(currentSlide + 1);
+        }, defaultDuration);
     }
     
     // Event listener untuk tombol prev
@@ -455,23 +410,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showSlide(index);
         });
     });
-    
-    // Atur suara video
-function updateVideoSound() {
-    slides.forEach((slide, index) => {
-        const vid = slide.querySelector("video");
-        if (!vid) return;
-
-        if (index === 3) {
-            vid.muted = false;
-            vid.currentTime = 0;
-            vid.play();
-        } else {
-            vid.muted = true;
-            vid.play();
-        }
-    });
-}
 
     // Mulai timer untuk slide pertama kali
     startSlideTimer();
