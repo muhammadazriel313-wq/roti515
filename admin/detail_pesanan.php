@@ -114,7 +114,8 @@ img { border-radius: 10px; margin-top: 10px; }
     <?php endif; ?>
 
     <!-- FORM UPDATE STATUS -->
-    <form method="POST" action="ubah_status.php" style="margin-top:20px;">
+
+    <form method="POST" action="ubah_status_pesanan.php" style="margin-top:20px;">
         <input type="hidden" name="id" value="<?php echo $pesanan['id']; ?>">
         <input type="hidden" name="nama_pembeli" value="<?php echo $pesanan['nama_pembeli']; ?>">
         <input type="hidden" name="no_telpon" value="<?php echo $pesanan['no_telpon']; ?>">

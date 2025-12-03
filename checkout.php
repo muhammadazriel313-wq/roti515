@@ -38,25 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $metode = mysqli_real_escape_string($koneksi, $_POST['metode_pembayaran']);
     $total = mysqli_real_escape_string($koneksi, $_POST['total_harga']);
     $daftar_item = $_POST['daftar_item'];
-    $jenis = mysqli_real_escape_string($koneksi, $_POST['jenis_customer']); // ★ JENIS PELANGGAN
+    $jenis = mysqli_real_escape_string($koneksi, $_POST['jenis_customer']); 
 
     $bukti_file = '';
-    // Status awal 'Belum Dibayar' agar konsisten dengan logika di codingan 1
+    // Status awal 'Belum Dibayar'
     $status = 'Belum Dibayar';
 
-    /* === UPLOAD BUKTI === */
-    if ($metode === 'transfer' && isset($_FILES['bukti']) && $_FILES['bukti']['error'] === 0) {
-        $ext = pathinfo($_FILES['bukti']['name'], PATHINFO_EXTENSION);
-        $bukti_file = 'bukti_' . time() . '.' . $ext;
-        move_uploaded_file($_FILES['bukti']['tmp_name'], 'uploads/' . $bukti_file);
-        // Jika ada bukti transfer, statusnya berubah
-        $status = 'Sudah Dibayar';
-    } else if ($metode === 'cod') {
-        // Jika COD, statusnya tetap 'Belum Dibayar' sampai admin konfirmasi
-        $status = 'Belum Dibayar';
-    }
 
-    /* === SIMPAN PESANAN === */
+    /* === 1. SIMPAN PESANAN (HANYA KE TABEL PESANAN) === */
     $sql = "INSERT INTO pesanan (nama_pembeli, no_telpon, alamat, total_harga, tanggal, metode_pembayaran, bukti_pembayaran, status)
             VALUES ('$nama', '$no_telp', '$alamat', '$total', NOW(), '$metode', '$bukti_file', '$status')";
 
@@ -64,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $id_pesanan = mysqli_insert_id($koneksi);
 
-        /* === SIMPAN / UPDATE PELANGGAN === */
+        /* === 2. SIMPAN / UPDATE PELANGGAN === */
         $cek = mysqli_query($koneksi, "SELECT * FROM pelanggan WHERE no_telpon='$no_telp'");
 
         if(mysqli_num_rows($cek) == 0){
@@ -82,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ");
         }
 
-        /* === DETAIL PESANAN === */
+        /* === 3. DETAIL PESANAN (HANYA KE TABEL DETAIL_PESANAN) === */
         $items = explode(",", $daftar_item);
 
         foreach ($items as $it) {
@@ -102,10 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         '$subtotal')
             ");
 
-            /* ==========================================
-               === [TAMBAHAN DARI CODINGAN 1] UPDATE STOK ===
-               ========================================== */
-
+            /* === 4. UPDATE STOK PRODUK === */
             // Ambil id produk berdasarkan nama
             $qProduk = mysqli_query($koneksi, "
                 SELECT id FROM produk WHERE nama_produk='" . mysqli_real_escape_string($koneksi, $nama_produk) . "'
@@ -123,42 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        /* ==================================================
-           === [TAMBAHAN DARI CODINGAN 1] SIMPAN KE LAPORAN ===
-           ================================================== */
-        
-        // Masukkan data ke tabel laporan
-        mysqli_query($koneksi, "
-            INSERT INTO laporan (nama_pembeli, no_telpon, alamat, total_harga, tanggal, metode_pembayaran, status)
-            VALUES ('$nama', '$no_telp', '$alamat', '$total', NOW(), '$metode', '$status')
-        ");
-        
-        $id_laporan = mysqli_insert_id($koneksi);
-        
-        // Masukkan detail produk terjual ke detail_laporan
-        foreach ($items as $it) {
-            if (trim($it) === '') continue;
-            
-            list($nama_produk, $qty, $harga) = explode("|", $it);
-            $qty = (int)$qty;
-            
-            // Ambil id produk berdasarkan nama
-            $qProduk = mysqli_query($koneksi, "
-                SELECT id FROM produk WHERE nama_produk='" . mysqli_real_escape_string($koneksi, $nama_produk) . "'
-            ");
-            $p = mysqli_fetch_assoc($qProduk);
-            $id_produk = $p['id'];
-            
-            if ($id_produk) {
-                // Masukkan ke detail_laporan dengan id_laporan yang benar
-                mysqli_query($koneksi, "
-                    INSERT INTO detail_laporan (id_laporan, id_produk, jumlah)
-                    VALUES ('$id_laporan', '$id_produk', '$qty')
-                ");
-            }
-        }
 
-        /* === FORMAT WA === */
+        /* === 5. FORMAT & KIRIM WA (TIDAK ADA PERUBAHAN) === */
         $teks_item = "";
         foreach ($items as $it) {
             if (trim($it) === '') continue;
@@ -167,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $teks_item .= "- $nama_produk ($qty x Rp" . number_format($harga,0,',','.') . ")\n";
         }
 
-        /* === KIRIM WA === */
         $token = "K9asMQwnsqqzJyF85tj7";
 
         if (substr($no_telp, 0, 1) === "0") {

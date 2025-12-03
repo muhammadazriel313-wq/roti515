@@ -114,7 +114,7 @@ include('database/koneksi.php');
     $query = mysqli_query($koneksi, "SELECT * FROM produk WHERE status='Aktif' ORDER BY id DESC");
     while ($p = mysqli_fetch_assoc($query)) {
         // Harga default
-$harga = isset($p['harga']) ? $p['harga'] : 4000;
+ $harga = isset($p['harga']) ? $p['harga'] : 4000;
 
 // Harga manual per-produk
 switch ($p['nama_produk']) {
@@ -198,64 +198,56 @@ switch ($p['nama_produk']) {
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Form Checkout</h2>
+    
+    <!-- TIPS: Tambahkan keterangan di atas form -->
+    <p><small>Field yang ditandai dengan <span style="color: red;">*</span> wajib diisi.</small></p>
+    <hr>
 
-<form id="checkoutForm" action="checkout.php" method="POST" enctype="multipart/form-data">
+    <form id="checkoutForm" action="checkout.php" method="POST" enctype="multipart/form-data">
 
-  <!-- PILIHAN JENIS CUSTOMER -->
-  <label>Jenis Customer</label>
-  <select name="jenis_customer" id="jenis_customer" required 
-    style="padding:6px;border-radius:5px;border:1px solid #ccc;">
-    <option value="">--Pilih Jenis--</option>
-    <option value="perorangan">Perorangan</option>
-    <option value="mitra">Mitra</option>
-  </select>
+      <!-- PILIHAN JENIS CUSTOMER (DIUBAH KEMBALI KE SELECT) -->
+      <label>Jenis Customer <span style="color: red;">*</span></label>
+      <select name="jenis_customer" id="jenis_customer" required 
+        style="padding:6px;border-radius:5px;border:1px solid #ccc;">
+        <option value="">--Pilih Jenis--</option>
+        <option value="perorangan">Perorangan</option>
+        <option value="mitra">Mitra</option>
+      </select>
 
-  <!-- AREA KHUSUS MITRA -->
-  <div id="mitraArea" style="display:none; margin-top:10px;">
-    <label>Nama Toko / Usaha</label>
-    <input type="text" name="nama_toko" id="nama_toko"
-      style="padding:6px;border-radius:5px;border:1px solid #ccc;">
+      <br>
 
-    <label>ID Mitra (opsional)</label>
-    <input type="text" name="id_mitra" id="id_mitra"
-      style="padding:6px;border-radius:5px;border:1px solid #ccc;">
-  </div>
+      <label>Nama <span style="color: red;">*</span></label>
+      <input type="text" name="nama" required style="padding:6px;border-radius:5px;border:1px solid #ccc;">
+      
+      <label>Nomor Telp / WA <span style="color: red;">*</span></label>
+      <input type="tel" name="no_telp" required style="padding:6px;border-radius:5px;border:1px solid #ccc;">
+      <small style="font-size: 12px; color: #666; display: block; margin-top: 5px;">Cth: 6281234567890 (bukan 0 atau +62)</small>
+      
+      <label>Alamat <span style="color: red;">*</span></label>
+      <textarea name="alamat" required style="padding:6px;border-radius:5px;border:1px solid #ccc;"></textarea>
 
-  <br>
+      <label>Metode Pembayaran <span style="color: red;">*</span></label>
+      <select id="metode" name="metode_pembayaran" required style="padding:6px;border-radius:5px;border:1px solid #ccc;">
+        <option value="">--Pilih Metode--</option>
+        <option value="transfer">Transfer Bank</option>
+        <option value="cod">Cash on Delivery (COD)</option>
+      </select>
 
-  <label>Nama</label>
-  <input type="text" name="nama" required style="padding:6px;border-radius:5px;border:1px solid #ccc;">
-  
-    <label>Nomor Telp / WA</label>
-  <input type="tel" name="no_telp" required style="padding:6px;border-radius:5px;border:1px solid #ccc;">
-  <!-- PERUBAHAN: Menambahkan keterangan format nomor telepon -->
-  <small style="font-size: 12px; color: #666; display: block; margin-top: 5px;">Cth: 6281234567890 (bukan 0 atau +62)</small>
-  
-  <label>Alamat</label>
-  <textarea name="alamat" required style="padding:6px;border-radius:5px;border:1px solid #ccc;"></textarea>
+      <div id="transferArea" style="display:none; margin-top:10px;">
+        <p><strong>Transfer ke rekening:</strong></p>
+        <p id="noRek">BRI  a.n. Roti 515</p>
+          <p>(Silahkan Upload Bukti Pembayaran di WA Kami)</p>
+      </div>
 
-  <label>Metode Pembayaran</label>
-  <select id="metode" name="metode_pembayaran" required style="padding:6px;border-radius:5px;border:1px solid #ccc;">
-    <option value="">--Pilih Metode--</option>
-    <option value="transfer">Transfer Bank</option>
-    <option value="cod">Cash on Delivery (COD)</option>
-  </select>
+      <input type="hidden" name="total_harga" id="input-total-harga" value="0">
+      <input type="hidden" name="daftar_item" id="input-daftar-item" value="">
 
-  <div id="transferArea" style="display:none; margin-top:10px;">
-    <p><strong>Transfer ke rekening:</strong></p>
-    <p id="noRek">BRI  642-3098-765-67 a.n. Roti 515</p>
-      <p>(Silahkan Upload Bukti Pembayaran di WA Kami)</p>
-  </div>
+      <button type="submit" name="pesan"
+        style="background:#a15e29;color:#fff;padding:10px;border:none;border-radius:5px;cursor:pointer;">
+        Pesan Sekarang
+      </button>
 
-  <input type="hidden" name="total_harga" id="input-total-harga" value="0">
-  <input type="hidden" name="daftar_item" id="input-daftar-item" value="">
-
-  <button type="submit" name="pesan"
-    style="background:#a15e29;color:#fff;padding:10px;border:none;border-radius:5px;cursor:pointer;">
-    Pesan Sekarang
-  </button>
-
-</form>
+    </form>
 
   </div>
 </div>
@@ -269,59 +261,115 @@ switch ($p['nama_produk']) {
   </div>
 </div>
 
+
 <script>
-// Ambil elemen popup
-const popupStok = document.getElementById("popupStok");
-const pesanStok = document.getElementById("pesanStok");
-document.querySelector(".closeStok").onclick = () => {
-  popupStok.style.display = "none";  
-  // Pastikan modal checkout tetap tertutup
-  document.getElementById("checkoutModal").style.display = "none";
-};
+document.addEventListener('DOMContentLoaded', function() {
 
-// CEK STOK SAAT CHECKOUT
-document.getElementById("checkout").addEventListener("click", function(e) {
+  // --- ELEMEN YANG SERING DIGUNAKAN ---
+  const popupStok = document.getElementById("popupStok");
+  const pesanStok = document.getElementById("pesanStok");
+  const checkoutModal = document.getElementById("checkoutModal");
+  const jenisCustomerSelect = document.getElementById("jenis_customer");
+  const mitraArea = document.getElementById("mitraArea");
+  const namaTokoInput = document.getElementById('nama_toko');
 
-  let cards = document.querySelectorAll(".card");
-  let adaError = false;
-  let pesan = "";
-
- cards.forEach(card => {
-  let stok = parseInt(card.getAttribute("data-stok"));
-  let qty = parseInt(card.querySelector(".jumlah").value);
-
-  if (qty > stok) {
-    adaError = true;
-    pesan += `Pembelian ${card.getAttribute("data-name")} melebihi stok tersedia<br>`;
-  }
-});
-
-  if (adaError) {
-    e.preventDefault();
-    pesanStok.innerHTML = pesan;
-    popupStok.style.display = "block";
-    return; // stop checkout
-  }
-
-  // Jika tidak ada error → buka modal checkout normal
-  document.getElementById("checkoutModal").style.display = "block";
-});
-const hamburger = document.getElementById("hamburger");
-const menu = document.querySelector("nav ul");
-
-hamburger.addEventListener("click", () => {
-  menu.classList.toggle("show");
-  hamburger.classList.toggle("active");
-});
-
-// Tutup menu saat klik link
-menu.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    menu.classList.remove("show");
-    hamburger.classList.remove("active");
+  // --- LOGIKA UNTUK POPUP PERINGATAN (STOK / KOSONG) ---
+  document.querySelector(".closeStok").onclick = () => {
+    popupStok.style.display = "none";  
+    // Tidak perlu menutup checkoutModal di sini, karena jika keranjang kosong, modal tidak akan pernah terbuka
+  };
+  
+  // --- LOGIKA UNTUK HAMBURGER MENU ---
+  const hamburger = document.getElementById("hamburger");
+  const menu = document.querySelector("nav ul");
+  hamburger.addEventListener("click", () => {
+    menu.classList.toggle("show");
+    hamburger.classList.toggle("active");
   });
-});
+  menu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("show");
+      hamburger.classList.remove("active");
+    });
+  });
 
+  // --- LOGIKA UNTUK MENGATUR PERUBAHAN DI DROPDOWN JENIS CUSTOMER ---
+  function updateJenisCustomer(selectedValue) {
+    if (selectedValue === 'mitra') {
+      mitraArea.style.display = "block";
+      namaTokoInput.setAttribute('required', '');
+    } else {
+      mitraArea.style.display = "none";
+      namaTokoInput.removeAttribute('required');
+    }
+  }
+  
+  // Event listener jika user mengubah dropdown secara manual
+  jenisCustomerSelect.addEventListener('change', function() {
+    updateJenisCustomer(this.value);
+  });
+
+  // --- LOGIKA UTAMA SAAT TOMBOL CHECKOUT DIKLIK ---
+  document.getElementById("checkout").addEventListener("click", function(e) {
+    
+    // 0. CEK KERANJANG KOSONG (DITAMBAHKAN)
+    let totalItem = parseInt(document.getElementById("total-item").innerText);
+    if (totalItem === 0) {
+      return; // Hentikan fungsi di sini
+    }
+
+    // 1. CEK STOK TERLEBIH DAHULU
+    let cards = document.querySelectorAll(".card");
+    let adaErrorStok = false;
+    let pesanErrorStok = "";
+
+    cards.forEach(card => {
+      let stok = parseInt(card.getAttribute("data-stok"));
+      let qty = parseInt(card.querySelector(".jumlah").value);
+
+      if (qty > stok) {
+        adaErrorStok = true;
+        pesanErrorStok += `Pembelian ${card.getAttribute("data-name")} melebihi stok tersedia.<br>`;
+      }
+    });
+
+    if (adaErrorStok) {
+      e.preventDefault();
+      pesanStok.innerHTML = pesanErrorStok; // Tampilkan pesan error stok
+      popupStok.style.display = "block";
+      return; // Hentikan fungsi
+    }
+
+    // 2. JIKA TIDAK ADA ERROR, LANJUTKAN PROSES CHECKOUT
+    checkoutModal.style.display = "block";
+
+    // 3. LOGIKA UNTUK MENGUBAH JENIS CUSTOMER SECARA OTOMATIS
+    setTimeout(() => {
+      let jenisGlobal = document.getElementById("jenis-global").value;
+      let finalJenisCustomer = '';
+      
+      if (jenisGlobal === "mitra") {
+        finalJenisCustomer = 'mitra';
+      } else { // jika perorangan
+        if (totalItem >= 100) {
+          finalJenisCustomer = 'mitra';
+        } else {
+          finalJenisCustomer = 'perorangan';
+        }
+      }
+
+      // Atur nilai dropdown dan tampilan area mitra
+      jenisCustomerSelect.value = finalJenisCustomer;
+      updateJenisCustomer(finalJenisCustomer);
+
+    }, 100); // delay singkat supaya modal udah muncul sempurna
+  });
+  
+  // --- LOGIKA UNTUK TUTUP MODAL CHECKOUT ---
+  document.querySelector(".close").onclick = () => {
+    checkoutModal.style.display = "none";
+  };
+});
 </script>
 
 <script src="keranjang.js"></script>

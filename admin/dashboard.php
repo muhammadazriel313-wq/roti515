@@ -141,7 +141,7 @@ include('../database/koneksi.php');
         </thead>
         <tbody>
         <?php
- $query = mysqli_query($koneksi, "SELECT * FROM pesanan ORDER BY tanggal DESC");
+ $query = mysqli_query($koneksi, "SELECT * FROM pesanan ORDER BY tanggal DESC LIMIT 10");
 
 while ($pesanan = mysqli_fetch_assoc($query)) {
 
